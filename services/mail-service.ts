@@ -1,14 +1,13 @@
 import nodemailer from "nodemailer"
-import SMTPTransport from "nodemailer/lib/smtp-transport"
+import { config } from '@dotenvx/dotenvx';
+config()
 
 class MailService {
     transporter
 
     constructor() {
         this.transporter = nodemailer.createTransport({
-            host: "smtp.yandex.ru",
-            port: Number(process.env.SMTP_PORT) || 0,
-            secure: false,
+            service: "yandex",
             auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASSWORD }
         })
     }
