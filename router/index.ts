@@ -1,7 +1,8 @@
 import { Router } from "express"
 import userController from "../controllers/user-controller"
 import { body } from "express-validator"
-import { emit } from "process"
+import authMiddleware from "../middelwares/auth-middleware"
+
 const router = Router()
 
 router.post("/registration",
@@ -12,6 +13,6 @@ router.post("/login", userController.login)
 router.post("/logout", userController.logout)
 router.get("/activate/:link", userController.activate)
 router.get("/refresh", userController.refresh)
-router.get("/users", userController.getUsers)
+router.get("/users", authMiddleware, userController.getUsers)
 
 export default router
