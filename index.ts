@@ -9,7 +9,7 @@ import errorMiddleware from "./middelwares/error-middleware";
 config()
 
 const PORT = process.env.PORT || 5000
-const app = express()
+export const app = express()
 
 app.use(express.json())
 app.use(cookieParser())
