@@ -11,7 +11,7 @@ const jwtRegexp = /(^[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*\.[A-Za-z0-9-_]*$)/
 
 describe("POST /api/registration", () => {
     describe("введена почта и пароль", () => {
-        test("должен вернуть код 200", async () => {
+        it("должен вернуть код 200", async () => {
 
 
 

@@ -1,9 +1,12 @@
 import { validationResult } from "express-validator"
 import userService from "../services/user-service"
 import ApiError from "../exeptions/api-error"
+import { Request, Response, NextFunction } from "express"
+
+const refrehTokenMaxAge = 30 * 24 * 60 * 60 * 1000
 
 class UserController {
-    async registration(req, res, next) {
+    async registration(req: Request, res: Response, next: NextFunction) {
         try {
             const errors = validationResult(req)
             if (!errors.isEmpty()) {
@@ -11,26 +14,26 @@ class UserController {
             }
             const { email, password } = req.body
             const userData = await userService.registration(email, password)
-            res.cookie('refrehToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
+            res.cookie('refrehToken', userData.refreshToken, { maxAge: refrehTokenMaxAge, httpOnly: true })
             return res.json(userData)
         } catch (e) {
             next(e)
         }
     }
 
-    async login(req, res, next) {
+    async login(req: Request, res: Response, next: NextFunction) {
         try {
             const { email, password } = req.body
             const userData = await userService.login(email, password)
 
-            res.cookie('refrehToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
+            res.cookie('refrehToken', userData.refreshToken, { maxAge: refrehTokenMaxAge, httpOnly: true })
             return res.json(userData)
         } catch (e) {
             next(e)
         }
     }
 
-    async logout(req, res, next) {
+    async logout(req: Request, res: Response, next: NextFunction) {
         try {
             const { refrehToken } = req.cookies
             const token = await userService.logout(refrehToken)
@@ -41,7 +44,7 @@ class UserController {
         }
     }
 
-    async activate(req, res, next) {
+    async activate(req: Request, res: Response, next: NextFunction) {
         try {
             const activationLink = req.params.link
             await userService.activate(activationLink)
@@ -51,19 +54,19 @@ class UserController {
         }
     }
 
-    async refresh(req, res, next) {
+    async refresh(req: Request, res: Response, next: NextFunction) {
         try {
             const { refrehToken } = req.cookies
             const userData = await userService.refresh(refrehToken)
 
-            res.cookie('refrehToken', userData.refreshToken, { maxAge: 30 * 24 * 60 * 60 * 1000, httpOnly: true })
+            res.cookie('refrehToken', userData.refreshToken, { maxAge: refrehTokenMaxAge, httpOnly: true })
             return res.json(userData)
         } catch (e) {
             next(e)
         }
     }
 
-    async getUsers(req, res, next) {
+    async getUsers(req: Request, res: Response, next: NextFunction) {
         try {
             const users = await userService.getAllUsers();
             return res.json(users)
